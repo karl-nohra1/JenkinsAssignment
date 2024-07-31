@@ -41,7 +41,9 @@ pipeline {
 
         stage('Approval') {
             steps {
-                input message: 'Approve deployment to production?', timeout: 1 * 60 * 60, timeoutMessage: 'Approval timed out'
+                script {
+                    input message: 'Approve deployment to production?'
+                }
             }
         }
 
