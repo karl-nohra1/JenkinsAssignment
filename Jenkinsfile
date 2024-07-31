@@ -2,17 +2,33 @@ pipeline {
     agent any
 
     stages {
+        stage('Setup Virtual Environment') {
+            steps {
+                echo 'Setting up Python virtual environment...'
+                sh '''
+                python3 -m venv myenv
+                source myenv/bin/activate
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'pip3 install -r requirements.txt'
+                sh '''
+                source myenv/bin/activate
+                pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Testing...'
-                sh 'python3 -m unittest discover'
+                sh '''
+                source myenv/bin/activate
+                python3 -m unittest discover
+                '''
             }
         }
 
@@ -25,7 +41,7 @@ pipeline {
 
         stage('Approval') {
             steps {
-                input 'Approve deployment to production?'
+                input message: 'Approve deployment to production?', timeout: 1 * 60 * 60, timeoutMessage: 'Approval timed out'
             }
         }
 
@@ -36,4 +52,18 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
+        }
+        always {
+            echo 'Cleaning up...'
+            // Add cleanup steps if needed
+        }
+    }
 }
+ 
