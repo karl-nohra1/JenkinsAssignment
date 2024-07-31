@@ -5,7 +5,7 @@ pipeline {
         stage('Setup Virtual Environment') {
             steps {
                 echo 'Setting up Python virtual environment...'
-                sh '''
+                sh 'sudo apt install python3-venv'
                 python3 -m venv myenv
                 . myenv/bin/activate
                 '''
