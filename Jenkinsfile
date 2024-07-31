@@ -5,14 +5,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'pip install -r requirements.txt'
+                sh 'pip3 install -r requirements.txt'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Testing...'
-                sh 'python -m unittest discover'
+                sh 'python3 -m unittest discover'
             }
         }
 
