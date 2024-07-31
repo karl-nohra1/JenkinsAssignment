@@ -7,7 +7,7 @@ pipeline {
                 echo 'Setting up Python virtual environment...'
                 sh '''
                 python3 -m venv myenv
-                source myenv/bin/activate
+                . myenv/bin/activate
                 '''
             }
         }
