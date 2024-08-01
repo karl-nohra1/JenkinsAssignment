@@ -9,6 +9,7 @@ pipeline {
                 sudo apt update
                 sudo apt install -y python3-venv python3-pip
                 python3 -m venv myenv
+                sudo chmod -R 755 myenv
                 '''
             }
         }
@@ -16,8 +17,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                sh '''#!/bin/bash
-                source myenv/bin/activate
+                sh '''
+                . myenv/bin/activate
                 pip install -r requirements.txt
                 '''
             }
@@ -26,8 +27,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
-                sh '''#!/bin/bash
-                source myenv/bin/activate
+                sh '''
+                . myenv/bin/activate
                 python3 -m unittest discover
                 '''
             }

@@ -1,1 +1,4 @@
-unittest
+flask==2.0.1
+requests==2.26.0
+# Add other packages needed for your project here
+
