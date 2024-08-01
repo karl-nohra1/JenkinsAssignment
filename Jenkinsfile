@@ -14,9 +14,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh '''
+                sh '''#!/bin/bash
                 source myenv/bin/activate
-                pip3 install -r requirements.txt
+                pip install -r requirements.txt
                 '''
             }
         }
@@ -24,7 +24,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing...'
-                sh '''
+                sh '''#!/bin/bash
                 source myenv/bin/activate
                 python3 -m unittest discover
                 '''
