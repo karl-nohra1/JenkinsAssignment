@@ -5,15 +5,19 @@ pipeline {
         stage('Setup Virtual Environment') {
             steps {
                 echo 'Setting up Python virtual environment...'
-                sh 'sudo apt install -y python3-venv'
-                sh 'python3 -m venv myenv'
-                sh 'sudo chmod +x myenv/bin/activate'
+                sh '''
+                sudo apt update
+                sudo apt install -y python3-venv python3-pip
+                python3 -m venv myenv
+                chmod -R 755 myenv
+                chmod +x myenv/bin/python3 myenv/bin/pip
+                '''
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Building...'
+                echo 'Installing dependencies...'
                 sh '''#!/bin/bash
                 source myenv/bin/activate
                 pip install -r requirements.txt
@@ -21,9 +25,9 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
-                echo 'Testing...'
+                echo 'Running tests...'
                 sh '''#!/bin/bash
                 source myenv/bin/activate
                 python3 -m unittest discover
@@ -31,25 +35,11 @@ pipeline {
             }
         }
 
-        stage('Deploy to Test Environment') {
+        stage('Deploy') {
             steps {
-                echo 'Deploying to Test Environment...'
-                // Add deployment commands here for your test environment
-            }
-        }
-
-        stage('Approval') {
-            steps {
-                script {
-                    input message: 'Approve deployment to production?'
-                }
-            }
-        }
-
-        stage('Deploy to Production') {
-            steps {
-                echo 'Deploying to Production...'
-                // Add deployment commands here for your production environment
+                echo 'Deploying application...'
+                // Add deployment commands here. For example:
+                // sh 'scp -r * user@server:/path/to/deploy'
             }
         }
     }
